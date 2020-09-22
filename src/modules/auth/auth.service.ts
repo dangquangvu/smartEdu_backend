@@ -2,6 +2,7 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -9,13 +10,25 @@ import { CreateUserDto, LoginUserDto } from './auth.dto';
 import { User } from './auth.interface';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt/dist/jwt.service';
+import * as Cryptr from 'cryptr';
+import * as jwt from 'jsonwebtoken';
 
 @Injectable()
 export class AuthService {
+  cryptr: any;
   constructor(
     @InjectModel('User') private userModel: Model<User>,
     private readonly jwtService: JwtService,
-  ) {}
+  ) {
+    this.cryptr = new Cryptr(process.env.JWT_SECRET);
+  }
+
+   createAccessToken(payload: any) {
+    const accessToken = jwt.sign({ payload }, process.env.JWT_SECRET, {
+      expiresIn: process.env.JWT_EXPIRATION,
+    });
+    return this.encryptText(accessToken);
+  }
 
   async signUp(authCredentialsDto: CreateUserDto) {
     const { email, password } = authCredentialsDto;
@@ -42,21 +55,40 @@ export class AuthService {
       );
     }
     await this.checkPassword(loginUserDto.password, user.password);
-    const payload = { email: user.email, password: user.password };
-    
+    const payload = { email: user.email, id: user._id };
+
     return {
       fullName: user.fullName,
       email: user.email,
-      accessToken: this.jwtService.sign(payload),
-      refreshToken: this.jwtService.sign(payload),
+      accessToken: this.createAccessToken(payload),
+      refreshToken: this.createAccessToken(payload),
     };
   }
 
+   async decodejwt(accessToken: string):Promise<any> {
+    const cryptr = new Cryptr(process.env.JWT_SECRET);
+    let decrypt;
+    try {
+      decrypt = cryptr.decrypt(accessToken);
+    } catch (error) {
+      throw new UnauthorizedException();
+    }
+    const payload =await jwt.decode(decrypt);
+    return payload;
+  }
+
+  async checkUserToken(accessToken: string) {
+    const payload =await this.decodejwt(accessToken);
+
+    const user = await this.findUserByEmail(payload.payload.email);
+    if (!user) {
+     return null;
+    }
+    return user;
+  }
+
   async validateUser(email: string, pass: string): Promise<User> {
-    console.log(email, pass);
-    
     const user = await this.userModel.findOne({ email: email });
-    console.log(user)
     if (!user) {
       return null;
     }
@@ -70,7 +102,7 @@ export class AuthService {
     return null;
   }
 
-  private async findUserByEmail(email: any): Promise<User> {
+  async findUserByEmail(email:string): Promise<User> {
     const user = await this.userModel.findOne({ email });
     if (!user) {
       throw new NotFoundException('Wrong email or password.');
@@ -78,11 +110,14 @@ export class AuthService {
     return user;
   }
 
-  private async checkPassword(attemptPass: string, password: string) {
+  async checkPassword(attemptPass: string, password: string) {
     const match = await bcrypt.compare(attemptPass, password);
     if (!match) {
       throw new NotFoundException('Wrong email or password.');
     }
     return match;
+  }
+  encryptText(text: string): string {
+    return this.cryptr.encrypt(text);
   }
 }
