@@ -18,11 +18,21 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const user =await this.getUserData(context);
+    const routeRoles = this.getRouteRoles(context);
+    const user = await this.getUserData(context);
+    console.log(routeRoles);
+    if (!routeRoles) {
+      return true;
+    }
+    const hasRole = () => user.roles.some(role => routeRoles.includes(role));
+    console.log(hasRole(), user.roles);
     if (!user) {
       throw new UnauthorizedException();
     }
-    return true;
+    if (!(hasRole())) {
+      throw new ForbiddenException('Forbidden');
+    }
+    return true && user;
   }
 
   private async getUserData(context: ExecutionContext): Promise<any> {
@@ -37,23 +47,13 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     const user = await this.authService.checkUserToken(accessToken);
     return user;
   }
-  // handleRequest(err, user, info: Error, context: ExecutionContext) {
-  //   const roles = this.reflector.get<string[]>('roles', context.getHandler());
-  //   if (!roles) {
-  //     return true;
-  //   }
 
-  //   const hasRole = () => user.roles.some(role => roles.includes(role));
-  //   console.log(user,'xxxx');
+  private getRouteRoles(context: ExecutionContext): string[] {
+    let routeRoles = this.reflector.get<string[]>('roles', context.getClass());
+    if (!routeRoles) {
+      routeRoles = this.reflector.get<string[]>('roles', context.getHandler());
+    }
 
-  //   if (!user) {
-  //     console.log('user');
-  //     throw new UnauthorizedException();
-  //   }
-  //   if (!(user.roles && hasRole())) {
-  //     console.log(user.roles && hasRole(),'aaa');
-  //     throw new ForbiddenException('Forbidden');
-  //   }
-  //   return user && user.roles && hasRole();
-  // }
+    return routeRoles;
+  }
 }

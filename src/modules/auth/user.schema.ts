@@ -24,11 +24,14 @@ export const UserSchema = new mongoose.Schema(
       maxlength: 1024,
       required: [true, 'PASSWORD_IS_BLANK'],
     },
-    roles: {
-      type: String,
-      enum: getStringEnumValues(UserRoles),
-      default: 'user',
-    },
+    roles: [
+      {
+        type: String,
+        enum: getStringEnumValues(UserRoles),
+        default: 'user',
+        required: true,
+      },
+    ],
     phone: {
       type: String,
       trim: true,

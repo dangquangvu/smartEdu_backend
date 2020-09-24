@@ -15,6 +15,6 @@ export interface User extends Document {
 
 export enum UserRoles {
   ADMIN = 'admin',
-  TEACHER = 'teacher',
+  MENTOR = 'mentor',
   USER = 'user',
 }

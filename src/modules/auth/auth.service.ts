@@ -7,7 +7,7 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateUserDto, LoginUserDto } from './auth.dto';
-import { User } from './auth.interface';
+import { User, UserRoles } from './auth.interface';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt/dist/jwt.service';
 import * as Cryptr from 'cryptr';
@@ -31,9 +31,17 @@ export class AuthService {
   }
 
   async signUp(authCredentialsDto: CreateUserDto) {
-    const { email, password } = authCredentialsDto;
-
-    const user = new this.userModel({ email: email, password: password });
+    let { email, password, fullName , roles } = authCredentialsDto;
+    console.log(authCredentialsDto);
+    if(!roles){
+      roles = [UserRoles.USER];
+    }
+    const user = new this.userModel({
+      email: email,
+      password: password,
+      fullName: fullName,
+      roles : roles
+    });
 
     try {
       await user.save();

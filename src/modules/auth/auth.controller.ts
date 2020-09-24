@@ -1,4 +1,4 @@
-import { User } from './auth.interface';
+import { User, UserRoles } from './auth.interface';
 import {
   Body,
   Controller,
@@ -15,6 +15,7 @@ import { CreateUserDto, LoginUserDto } from './auth.dto';
 
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './guard/jwt-auth.guard';
+import { Roles } from 'src/shared/decorators/roles.decorator';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -25,7 +26,6 @@ export class AuthController {
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: 'Register user' })
   signUp(@Body(ValidationPipe) createUserDto: CreateUserDto): Promise<User> {
-    console.log('aaa');
     return this.authService.signUp(createUserDto);
   }
 
@@ -40,6 +40,7 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
+  @Roles(...[UserRoles.ADMIN, UserRoles.MENTOR])
   getMe() {
     return 'hello world!';
   }
