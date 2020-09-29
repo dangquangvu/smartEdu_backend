@@ -32,6 +32,10 @@ export const UserSchema = new mongoose.Schema(
         required: true,
       },
     ],
+    gender: {
+      type: Boolean,
+      default: true,
+    },
     phone: {
       type: String,
       trim: true,

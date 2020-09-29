@@ -12,7 +12,6 @@ import { JwtStrategy } from './strategies/jwt-auth.strategy';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
     MongooseModule.forFeature([{ name: DbModel.USER, schema: UserSchema }]),
     PassportModule,
     JwtModule.register({
@@ -22,6 +21,8 @@ import { JwtStrategy } from './strategies/jwt-auth.strategy';
   ],
   controllers: [AuthController],
   providers: [AuthService, LocalStrategy, JwtStrategy],
-  exports: [AuthService],
+  exports: [
+    AuthService,
+  ],
 })
 export class AuthModule {}

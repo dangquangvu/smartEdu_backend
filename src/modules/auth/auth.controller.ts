@@ -39,6 +39,7 @@ export class AuthController {
   @Get('me')
   @HttpCode(HttpStatus.OK)
   @ApiBearerAuth()
+  @ApiOperation({ summary: 'test role user' })
   @UseGuards(JwtAuthGuard)
   @Roles(...[UserRoles.ADMIN, UserRoles.MENTOR])
   getMe() {

@@ -9,7 +9,6 @@ import { Model } from 'mongoose';
 import { CreateUserDto, LoginUserDto } from './auth.dto';
 import { User, UserRoles } from './auth.interface';
 import * as bcrypt from 'bcrypt';
-import { JwtService } from '@nestjs/jwt/dist/jwt.service';
 import * as Cryptr from 'cryptr';
 import * as jwt from 'jsonwebtoken';
 
@@ -18,7 +17,6 @@ export class AuthService {
   cryptr: any;
   constructor(
     @InjectModel('User') private userModel: Model<User>,
-    private readonly jwtService: JwtService,
   ) {
     this.cryptr = new Cryptr(process.env.JWT_SECRET);
   }
