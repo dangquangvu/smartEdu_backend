@@ -7,10 +7,11 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateUserDto, LoginUserDto } from './auth.dto';
-import { User, UserRoles } from './auth.interface';
+import { UserRoles } from './auth.interface';
 import * as bcrypt from 'bcrypt';
 import * as Cryptr from 'cryptr';
 import * as jwt from 'jsonwebtoken';
+import { User } from 'src/shared/interfaces/db.interface';
 
 @Injectable()
 export class AuthService {

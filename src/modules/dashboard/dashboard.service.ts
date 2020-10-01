@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { User } from '../auth/auth.interface';
+import { User } from 'src/shared/interfaces/db.interface';
 
 @Injectable()
 export class DashboardService {

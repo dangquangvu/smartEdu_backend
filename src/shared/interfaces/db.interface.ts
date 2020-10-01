@@ -1,30 +1,61 @@
 import { Document } from 'mongoose';
 
+export interface User extends Document {
+  fullName?: string;
+  email: string;
+  password: string;
+  roles?: string;
+  phone?: String;
+  address?: String;
+  gender?: boolean;
+  block?: boolean;
+  permission?: [string];
+  enterprise?: boolean;
+  verified?: boolean;
+  created_at?: Date;
+  updated_at?: Date;
+}
+
 // for web dash board
 export interface Comment extends Document {
   id_course: string;
   id_user: string;
   email: string;
-  phone: string;
   fullname: string;
+  image : string;
   content: string;
-  parent: true;
-  reply: [Comment];
+  parent: boolean;
+  reply: [SubComment];
   like: number;
   isedit: boolean;
   announce: boolean;
-  created_at?: string;
-  updated_at?: string;
+  created_at?: Date;
+  updated_at?: Date;
 }
+
+export interface SubComment {
+  id_course: string;
+  id_user: string;
+  id_parent: string;
+  email: string;
+  fullname: string;
+  image: string;
+  content: string;
+  parent: boolean;
+  like: number;
+  isedit: boolean;
+  announce: boolean;
+  created_at?: Date;
+  updated_at?: Date;
+}
+
 // rate snapshot user
 export interface Rate extends Document {
   id_user: string;
-  fullname: string;
-  email: string;
   score: number;
   achievement: [string];
-  created_at?: string;
-  updated_at?: string;
+  created_at?: Date;
+  updated_at?: Date;
 }
 //not enough
 // course folder save signature of course learn ex: title, description, review
@@ -33,31 +64,32 @@ export interface PresentCourse extends Document {
   id_course: string;
   joined: [string];
   author: string;
-  fullname: string;
-  email: string;
-  image: string;
   title: string;
   description: string;
   review: [review];
   album: [album];
-  created_at?: string;
-  updated_at?: string;
+  created_at?: Date;
+  updated_at?: Date;
 }
 // help search
-export enum album {}
-// review course learn
-export interface review extends Document {
-  reviewer: string;
+export interface album {
+  author: string;
   image: string;
-  fullname: string;
-  email: string;
+  title: string;
+  created_at: Date;
+  updated_at: Date;
+}
+// review course learn
+export interface review{
+  reviewer: string;
   content: string;
   rate: rateStar;
-  created_at?: string;
-  updated_at?: string;
+  created_at?: Date;
+  updated_at?: Date;
 }
 
 export enum rateStar {
+  NONE = 0,
   VERY_BAD = 1,
   BAD = 2,
   NORMAL = 3,
@@ -72,10 +104,10 @@ export interface Course extends Document {
   subtitle: string;
   url_video: string;
   practise: [Practise];
-  created_at?: string;
-  updated_at?: string;
+  created_at?: Date;
+  updated_at?: Date;
 }
-
+//template course ex: admin define course practise score
 export interface Practise {
   id_course: string;
   index: string;
@@ -85,8 +117,8 @@ export interface Practise {
   check_answer: [check_answer];
   checked_true: boolean;
   score: number;
-  created_at?: string;
-  updated_at?: string;
+  created_at?: Date;
+  updated_at?: Date;
 }
 
 export enum check_answer {
@@ -97,26 +129,24 @@ export enum check_answer {
 }
 // progress user course complete present
 export interface ProgressUserCourse extends Document {
-  id_course: string;
   id_user: string;
-  fullname: string;
-  image: string;
-  email: string;
+  total_score: number;
   achived: [string];
-  progress: [progress];
+  course_complete: [CompleteCourse];
 }
 
 // secment task practise in session
-export interface progress {
+export interface CompleteCourse {
   id_course: string;
-  index_course: string;
+  index_Subcourse: string;
   title: string;
-  id_user: string;
+  score: number;
 }
-// save old couser complete, and non-complete
-export interface UserCourse extends Document {
+// save now status course user errol
+export interface UserCoursePresent extends Document {
   id_user: string;
-  total_score: number;
+  id_parent_course: string;
+  index_session: number;
 }
 // chart art course
 export interface ChartCourseDid extends Document {
@@ -124,4 +154,12 @@ export interface ChartCourseDid extends Document {
   score: string;
 }
 // feedback
-export interface feedback extends Document {}
+export interface feedbackMentor extends Document {}
+// mentor help
+export interface enterpriceAccount extends Document {}
+
+/**
+ * comment:for web dash board
+ * review: review course learn
+ * feedbackMentor : feekback mentor
+ */
