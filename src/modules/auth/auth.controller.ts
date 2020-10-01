@@ -1,4 +1,4 @@
-import { User, UserRoles } from './auth.interface';
+import { UserRoles } from './auth.interface';
 import {
   Body,
   Controller,
@@ -16,6 +16,7 @@ import { CreateUserDto, LoginUserDto } from './auth.dto';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './guard/jwt-auth.guard';
 import { Roles } from 'src/shared/decorators/roles.decorator';
+import { User } from 'src/shared/interfaces/db.interface';
 
 @ApiTags('auth')
 @Controller('auth')
