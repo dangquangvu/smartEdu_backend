@@ -9,7 +9,7 @@ export const UserCoursePresent = new Schema({
   },
   id_parent_course: {
     type: Schema.Types.ObjectId,
-    ref: DbModel.PARENTCOURSE,
+    ref: DbModel.COURSE ,
   },
   index_session: { type: Number, required: true },
 });

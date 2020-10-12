@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config/dist/config.module';
 import { MongooseModule } from '@nestjs/mongoose/dist/mongoose.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { CommentModule } from './modules/comment/comment.module';
+import { CourseModule } from './modules/course/course.module';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
 
 @Module({
@@ -14,6 +16,8 @@ import { DashboardModule } from './modules/dashboard/dashboard.module';
     }),
     AuthModule,
     DashboardModule,
+    CommentModule,
+    CourseModule,
   ],
 })
 export class AppModule {}

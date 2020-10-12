@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const CompleteCourse = new Schema({
   id_course: {
     type: Schema.Types.ObjectId,
-    ref: DbModel.PARENTCOURSE,
+    ref: DbModel.COURSE,
   },
   index_Subcourse: {
     type: String,

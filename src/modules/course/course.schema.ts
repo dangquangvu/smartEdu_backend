@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import { DbModel } from '../constants';
+import { DbModel } from 'src/shared/constants';
 const Schema = mongoose.Schema;
 
 const Review = new Schema({
@@ -46,13 +46,19 @@ const Album = new Schema({
   },
 });
 
-export const PARENTCOURSE = new Schema({
+export const CourseSchema = new Schema({
   author: {
     type: Schema.Types.ObjectId,
     ref: DbModel.USER,
   },
   id_course: {
     type: Schema.Types.ObjectId,
+    //   ref course
+  },
+  index: {
+    type: Number,
+    unique: true,
+    required: true,
     //   ref course
   },
   joined: [Schema.Types.ObjectId],
@@ -66,8 +72,8 @@ export const PARENTCOURSE = new Schema({
     type: String,
     trim: true,
   },
-  review: [{ type: Review }],
-  album: [{ type: Album }],
+  // review: [{ type: Review }],
+  // album: [{ type: Album }],
   created_at: {
     type: Date,
   },

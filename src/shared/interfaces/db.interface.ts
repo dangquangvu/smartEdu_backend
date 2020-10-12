@@ -16,35 +16,16 @@ export interface User extends Document {
   updated_at?: Date;
 }
 
-// for web dash board
+// for course
 export interface Comment extends Document {
+  id_user_cmt: string;
   id_course: string;
-  id_user: string;
-  email: string;
-  fullname: string;
-  image : string;
+  id_parent_cmt: string;
   content: string;
-  parent: boolean;
-  reply: [SubComment];
+  isparent: boolean;
   like: number;
   isedit: boolean;
-  announce: boolean;
-  created_at?: Date;
-  updated_at?: Date;
-}
-
-export interface SubComment {
-  id_course: string;
-  id_user: string;
-  id_parent: string;
-  email: string;
-  fullname: string;
-  image: string;
-  content: string;
-  parent: boolean;
-  like: number;
-  isedit: boolean;
-  announce: boolean;
+  isannounce: boolean;
   created_at?: Date;
   updated_at?: Date;
 }
@@ -59,15 +40,15 @@ export interface Rate extends Document {
 }
 //not enough
 // course folder save signature of course learn ex: title, description, review
-export interface PresentCourse extends Document {
-  index: number;
+export interface Course extends Document {
   id_course: string;
-  joined: [string];
-  author: string;
+  index: number;
   title: string;
   description: string;
-  review: [review];
-  album: [album];
+  // author: string;
+  // review: [review];
+  joined: [string];
+  // album: [album];
   created_at?: Date;
   updated_at?: Date;
 }
@@ -80,7 +61,7 @@ export interface album {
   updated_at: Date;
 }
 // review course learn
-export interface review{
+export interface review {
   reviewer: string;
   content: string;
   rate: rateStar;
@@ -98,8 +79,8 @@ export enum rateStar {
 }
 
 // coures learn
-export interface Course extends Document {
-  id_course: string;
+export interface CourseDetails extends Document {
+  id_parent: string;
   index_session: number;
   subtitle: string;
   url_video: string;

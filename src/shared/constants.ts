@@ -5,8 +5,8 @@ export const BACKEND_ROLES = ['admin', 'teacher', 'user'];
 export const DbModel = {
   USER: 'User',
   RATE: 'Rate',
-  PARENTCOURSE: 'Parent_course',
   COURSE: 'Course',
+  COURSEDETAILS: 'CourseDetails',
   COMMENT: 'Comment',
   PROGRESS_USER_COURSE: 'Progress_user_course',
   USER_COURSE_PRESENT: 'User_course_present',

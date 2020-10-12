@@ -1,13 +1,13 @@
 import * as mongoose from 'mongoose';
-import { DbModel } from '../constants';
-import { getStringEnumValues } from '../helper';
-import { check_answer } from '../interfaces/db.interface';
+import { DbModel } from 'src/shared/constants';
+import { getStringEnumValues } from 'src/shared/helper';
+import { check_answer } from 'src/shared/interfaces/db.interface';
 const Schema = mongoose.Schema;
 
 const Practise = new Schema({
   id_course: {
     type: Schema.Types.ObjectId,
-    ref: DbModel.PARENTCOURSE,
+    ref: DbModel.COURSE,
   },
   index: {
     type: String,
@@ -37,10 +37,10 @@ const Practise = new Schema({
   score: { type: Number, default: 0 },
 });
 
-export const Course = new Schema({
+export const CourseDetails = new Schema({
   id_parent: {
     type: Schema.Types.ObjectId,
-    ref: DbModel.PARENTCOURSE,
+    ref: DbModel.COURSE,
   },
   index_session: { type: Number },
   subtitle: {
@@ -51,7 +51,7 @@ export const Course = new Schema({
     type: String,
     required: true,
   },
-  practise: [{ type: Practise}],
+  practise: [{ type: Practise }],
   created_at: {
     type: Date,
   },
