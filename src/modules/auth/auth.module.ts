@@ -9,6 +9,8 @@ import { UserSchema } from './user.schema';
 import { AuthController } from './auth.controller';
 import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStrategy } from './strategies/jwt-auth.strategy';
+import { UserService } from './user/user.service';
+import { UserController } from './user/user.controller';
 
 @Module({
   imports: [
@@ -19,8 +21,8 @@ import { JwtStrategy } from './strategies/jwt-auth.strategy';
       signOptions: { expiresIn: '60m' },
     }),
   ],
-  controllers: [AuthController],
-  providers: [AuthService, LocalStrategy, JwtStrategy],
+  controllers: [AuthController, UserController],
+  providers: [AuthService, LocalStrategy, JwtStrategy, UserService],
   exports: [
     AuthService,
   ],

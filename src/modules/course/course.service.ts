@@ -1,10 +1,13 @@
 import {
   ConflictException,
+  HttpException,
+  HttpStatus,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { checkObjectId } from 'src/shared/helper';
 import { Course } from 'src/shared/interfaces/db.interface';
 import { CourseDto } from './course.dto';
 
@@ -20,6 +23,9 @@ export class CourseService {
     return course;
   }
   async indexCourseDetails(id: string) {
+    if (!checkObjectId(id)) {
+      throw new HttpException('Id is not correct!', HttpStatus.BAD_REQUEST);
+    }
     let course = await this.courseModel.findOne({ _id: id });
     if (!course) {
       throw new NotFoundException('Course is not found!');
@@ -36,17 +42,21 @@ export class CourseService {
       title: courseDto.title,
       description: courseDto.description,
     });
-
+    let result;
     try {
-      await course.save();
+      result = await course.save();
     } catch (error) {
       if (error.code === 11000) {
         throw new ConflictException('Course already exists');
       }
       throw error;
     }
+    return result;
   }
   async updateCourse(courseDto: CourseDto, id: string) {
+    if (!checkObjectId(id)) {
+      throw new HttpException('Id is not correct!', HttpStatus.BAD_REQUEST);
+    }
     let condition = {};
     if (courseDto.index) {
       condition['index'] = courseDto.index;
@@ -70,11 +80,14 @@ export class CourseService {
         },
       );
     } catch (error) {
-      console.log(error);
+      throw new NotFoundException('Course is not update!')
     }
   }
   //draft
   async deleteCourse(id: string) {
+    if (!checkObjectId(id)) {
+      throw new HttpException('Id is not correct!', HttpStatus.BAD_REQUEST);
+    }
     let course = await this.courseModel.findOne({ _id: id });
     if (!course) {
       throw new NotFoundException('Course is not found!');

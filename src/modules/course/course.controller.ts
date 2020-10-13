@@ -23,7 +23,7 @@ import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
 import { UserRoles } from '../auth/auth.interface';
 import { CourseDto } from './course.dto';
 
-@ApiTags('Course')
+@ApiTags('course')
 @Controller('course')
 export class CourseController {
   constructor(private courseService: CourseService) {}

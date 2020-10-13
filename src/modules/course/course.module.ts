@@ -8,6 +8,7 @@ import { DbModel } from 'src/shared/constants';
 import { CourseSchema } from './course.schema';
 import { CourseDetails } from './course-details/course-details.schema';
 import { AuthModule } from '../auth/auth.module';
+import { PractiseModule } from './practise/practise.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { AuthModule } from '../auth/auth.module';
     ]),
     CourseDetailsModule,
     AuthModule,
+    PractiseModule,
   ],
   controllers: [CourseController],
   providers: [CourseService, CourseDetailsService],

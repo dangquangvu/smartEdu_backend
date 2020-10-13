@@ -83,13 +83,14 @@ export interface CourseDetails extends Document {
   id_parent: string;
   index_session: number;
   subtitle: string;
+  description : string;
   url_video: string;
-  practise: [Practise];
+  practise: [string];
   created_at?: Date;
   updated_at?: Date;
 }
 //template course ex: admin define course practise score
-export interface Practise {
+export interface Practise extends Document {
   id_course: string;
   index: string;
   title: string;

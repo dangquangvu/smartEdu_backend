@@ -9,7 +9,7 @@ export const CommentSchema = new Schema({
          },
          id_course: {
            type: Schema.Types.ObjectId,
-           ref: DbModel.COURSE,
+           ref: DbModel.COURSEDETAILS,
          },
          id_parent_cmt: {
            type: Schema.Types.ObjectId,
