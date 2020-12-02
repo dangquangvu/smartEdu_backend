@@ -21,5 +21,5 @@ export class createDirDto {
   })
   @IsNotEmpty()
   @IsString()
-  readonly yrl: string;
+  readonly dir: string;
 }

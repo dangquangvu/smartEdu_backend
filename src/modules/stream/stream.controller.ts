@@ -8,6 +8,7 @@ import {
   HttpStatus,
   NotImplementedException,
   Param,
+  Post,
   Query,
   UseGuards,
 } from '@nestjs/common';
@@ -26,17 +27,34 @@ export class StreamController {
     private readonly streamService: StreamService,
     private readonly accountService: AccountService,
   ) {}
-  @Get('upload')
+  @Post('upload')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'upload video in google drive' })
-  postVideo(@Query('dir') dir: createDirDto) {
-    if (dir) {
+  postVideo(@Body() dir: createDirDto) {
+    if (!this.isVideo(dir.dir)) {
       throw new BadRequestException('Param is not match!');
     }
-    let data = this.streamService.postVideo(url);
+    let data = this.streamService.postVideo(dir.dir);
     if (data) {
       return data;
     }
     throw new NotImplementedException('not upload data!');
+  }
+
+  isVideo(filename) {
+    let ext = this.getExtension(filename);
+    switch (ext.toLowerCase()) {
+      case 'm4v':
+      case 'avi':
+      case 'mpg':
+      case 'mp4':
+        // etc
+        return true;
+    }
+    return false;
+  }
+  getExtension(filename) {
+    let parts = filename.split('.');
+    return parts[parts.length - 1];
   }
 }
