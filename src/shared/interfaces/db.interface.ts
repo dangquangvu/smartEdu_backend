@@ -140,6 +140,21 @@ export interface feedbackMentor extends Document {}
 // mentor help
 export interface enterpriceAccount extends Document {}
 
+//payment transaction (bang thanh toan cac giao dich)
+export interface payment extends Document {}
+
+//wallet 
+export interface wallet extends Document {
+  id_user: string;
+  amount: number;
+  currency : string;
+  
+}
+
+// transaction
+export interface transaction extends Document {
+
+}
 /**
  * comment:for web dash board
  * review: review course learn

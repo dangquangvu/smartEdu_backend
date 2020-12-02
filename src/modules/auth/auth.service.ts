@@ -16,13 +16,11 @@ import { User } from 'src/shared/interfaces/db.interface';
 @Injectable()
 export class AuthService {
   cryptr: any;
-  constructor(
-    @InjectModel('User') private userModel: Model<User>,
-  ) {
+  constructor(@InjectModel('User') private userModel: Model<User>) {
     this.cryptr = new Cryptr(process.env.JWT_SECRET);
   }
 
-   createAccessToken(payload: any) {
+  createAccessToken(payload: any) {
     const accessToken = jwt.sign({ payload }, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_EXPIRATION,
     });
@@ -30,16 +28,16 @@ export class AuthService {
   }
 
   async signUp(authCredentialsDto: CreateUserDto) {
-    let { email, password, fullName , roles } = authCredentialsDto;
+    let { email, password, fullName, roles } = authCredentialsDto;
     console.log(authCredentialsDto);
-    if(!roles){
+    if (!roles) {
       roles = [UserRoles.USER];
     }
     const user = new this.userModel({
       email: email,
       password: password,
       fullName: fullName,
-      roles : roles
+      roles: roles,
     });
 
     try {
@@ -72,7 +70,7 @@ export class AuthService {
     };
   }
 
-   async decodejwt(accessToken: string):Promise<any> {
+  async decodejwt(accessToken: string): Promise<any> {
     const cryptr = new Cryptr(process.env.JWT_SECRET);
     let decrypt;
     try {
@@ -80,16 +78,16 @@ export class AuthService {
     } catch (error) {
       throw new UnauthorizedException();
     }
-    const payload =await jwt.decode(decrypt);
+    const payload = await jwt.decode(decrypt);
     return payload;
   }
 
   async checkUserToken(accessToken: string) {
-    const payload =await this.decodejwt(accessToken);
+    const payload = await this.decodejwt(accessToken);
 
     const user = await this.findUserByEmail(payload.payload.email);
     if (!user) {
-     return null;
+      return null;
     }
     return user;
   }
@@ -109,7 +107,7 @@ export class AuthService {
     return null;
   }
 
-  async findUserByEmail(email:string): Promise<User> {
+  async findUserByEmail(email: string): Promise<User> {
     const user = await this.userModel.findOne({ email });
     if (!user) {
       throw new NotFoundException('Wrong email or password.');
