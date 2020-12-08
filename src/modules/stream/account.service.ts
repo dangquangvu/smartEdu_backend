@@ -22,10 +22,7 @@ export class AccountService {
       token_type: 'Bearer',
       expiry_date: expiry_date,
     });
-    return {
-      email: email,
-      auth,
-    };
+    return auth;
   }
 
   drive = google.drive({

@@ -20,6 +20,8 @@ import { StreamService } from './stream.service';
 import * as fs from 'fs';
 import { url } from 'inspector';
 import { createDirDto } from './stream.interface';
+import { isVideo } from 'src/shared/helper';
+import { IPath } from './stream.type';
 @ApiTags('stream')
 @Controller('stream')
 export class StreamController {
@@ -31,7 +33,7 @@ export class StreamController {
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'upload video in google drive' })
   postVideo(@Body() dir: createDirDto) {
-    if (!this.isVideo(dir.dir)) {
+    if (!isVideo(dir.dir)) {
       throw new BadRequestException('Param is not match!');
     }
     let data = this.streamService.postVideo(dir.dir);
@@ -41,20 +43,17 @@ export class StreamController {
     throw new NotImplementedException('not upload data!');
   }
 
-  isVideo(filename) {
-    let ext = this.getExtension(filename);
-    switch (ext.toLowerCase()) {
-      case 'm4v':
-      case 'avi':
-      case 'mpg':
-      case 'mp4':
-        // etc
-        return true;
-    }
-    return false;
+  @Get('path')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'get path all video in google drive' })
+  indexPaths(): Promise<any> {
+    return this.streamService.indexPaths();
   }
-  getExtension(filename) {
-    let parts = filename.split('.');
-    return parts[parts.length - 1];
+
+  @Get('urlVideo')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'get video url in google drive' })
+  indexUrlVideo(@Query('id') id: string): Promise<string> {
+    return this.streamService.indexUrlVideo(id);
   }
 }
