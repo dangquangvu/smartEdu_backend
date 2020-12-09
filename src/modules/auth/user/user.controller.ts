@@ -1,6 +1,6 @@
 import { InputUpdateUserDto } from './user.dto';
 import {
-    Body,
+  Body,
   Controller,
   Delete,
   Get,
@@ -37,7 +37,12 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @Roles(...[UserRoles.ADMIN, UserRoles.MENTOR, UserRoles.USER])
-  indexUserDetails(@Param('id') id: string): Promise<any> {
+  indexUserDetails(
+    @Param('id') id: string,
+    @Req() request: Request,
+  ): Promise<any> {
+    const authHeader = request.headers.authorization;
+    const accessToken = authHeader && authHeader.split(' ')[1];
     return this.userService.indexUserDetails(id);
   }
 

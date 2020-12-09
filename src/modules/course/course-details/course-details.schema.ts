@@ -1,7 +1,6 @@
 import * as mongoose from 'mongoose';
 import { DbModel } from 'src/shared/constants';
-import { getStringEnumValues } from 'src/shared/helper';
-import { check_answer } from 'src/shared/interfaces/db.interface';
+
 const Schema = mongoose.Schema;
 
 export const CourseDetails = new Schema({
@@ -15,11 +14,12 @@ export const CourseDetails = new Schema({
     required: true,
   },
   description: { type: String, required: false },
+  content: { type: String, required: true },
   url_video: {
     type: String,
-    required: false,
+    required: true,
   },
-  practise: [{ type: Schema.Types.ObjectId, ref: DbModel.COURSE }],
+  practise: [{ type: Schema.Types.ObjectId, ref: DbModel.PRACTISE }],
   created_at: {
     type: Date,
   },

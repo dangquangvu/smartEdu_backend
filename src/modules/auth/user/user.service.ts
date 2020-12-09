@@ -27,6 +27,7 @@ export class UserService {
     }
     return user;
   }
+
   async indexUserDetails(id: string) {
     if (!checkObjectId(id)) {
       throw new HttpException('Id is not correct!', HttpStatus.BAD_REQUEST);
@@ -48,12 +49,11 @@ export class UserService {
     }
 
     const user_token = await this.authService.checkUserToken(accessToken);
-    console.log(user_token,'xxx');
-    if (!user_token.roles.includes('admin')) {
-      if (user_token._id != id) {
-        throw new ForbiddenException('Permission denied');
-      }
-    }
+    // if (!user_token.roles.includes('admin')) {
+    //   if (user_token._id != id) {
+    //     throw new ForbiddenException('Permission denied');
+    //   }
+    // }
     const user = await this.userModel.findOne({ _id: id });
     if (!user) {
       throw new NotFoundException('User is not found!');
@@ -65,9 +65,7 @@ export class UserService {
     if (input.email) {
       condition['email'] = input.email;
     }
-    if (input.roles) {
-      condition['roles'] = [input.roles];
-    }
+
     if (input.phone) {
       condition['phone'] = input.phone;
     }
@@ -77,20 +75,24 @@ export class UserService {
     if (typeof input.gender === 'boolean') {
       condition['gender'] = input.gender;
     }
-    if (typeof input.enterprise === 'boolean') {
-      condition['enterprise'] = input.enterprise;
+    if (user_token.roles.includes('admin')) {
+      if (typeof input.enterprise === 'boolean') {
+        condition['enterprise'] = input.enterprise;
+      }
+      if (typeof input.block === 'boolean') {
+        condition['block'] = input.block;
+      }
+      if (input.roles) {
+        condition['roles'] = [input.roles];
+      }
     }
     if (typeof input.verified === 'boolean') {
-        condition['verified'] = input.verified;
-    }
-    if (typeof input.block === 'boolean') {
-        condition['block'] = input.block;
+      condition['verified'] = input.verified;
     }
     if (input.password) {
-         const hashed = await bcrypt.hash(input.password, 10);
-        condition['password'] = hashed;
+      const hashed = await bcrypt.hash(input.password, 10);
+      condition['password'] = hashed;
     }
-    console.log(condition);
     try {
       await this.userModel.updateOne(
         { _id: id },
@@ -101,7 +103,6 @@ export class UserService {
     } catch (error) {
       throw new NotFoundException('Course is not update!');
     }
-
   }
 
   // block user in black líst

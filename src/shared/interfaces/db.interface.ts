@@ -83,7 +83,8 @@ export interface CourseDetails extends Document {
   id_parent: string;
   index_session: number;
   subtitle: string;
-  description : string;
+  description?: string;
+  content: string;
   url_video: string;
   practise: [string];
   created_at?: Date;
@@ -143,18 +144,15 @@ export interface enterpriceAccount extends Document {}
 //payment transaction (bang thanh toan cac giao dich)
 export interface payment extends Document {}
 
-//wallet 
+//wallet
 export interface wallet extends Document {
   id_user: string;
   amount: number;
-  currency : string;
-  
+  currency: string;
 }
 
 // transaction
-export interface transaction extends Document {
-
-}
+export interface transaction extends Document {}
 /**
  * comment:for web dash board
  * review: review course learn
