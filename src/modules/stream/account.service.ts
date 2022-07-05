@@ -39,6 +39,7 @@ export class AccountService {
     return oauth2Client.generateAuthUrl({
       access_type: 'offline',
       scope: this.SCOPES,
+      include_granted_scopes: true
     });
   };
   //get and save token file
